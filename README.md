@@ -7,7 +7,7 @@
 ---
 ![Emotion Recognition](images/img.jpeg)
 ---
-## **Description Générale du Sujet**
+## **Description Générale du Projet**
 
 L’objectif principal de ce stage est de concevoir et développer une plateforme intelligente permettant d’évaluer l’état psychologique des employés en entreprise, à travers deux approches non-invasives :
 
@@ -19,7 +19,7 @@ Ces évaluations visent à aider les départements RH à prévenir les risques p
 
 ---
 
-## **Objectifs du Stage**
+## **Objectifs du Projet**
 
 * Étudier les techniques d’analyse émotionnelle à partir d’images faciales (deep learning).
 
