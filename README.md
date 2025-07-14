@@ -2,8 +2,6 @@
 [🔗 View this repository on GitHub](https://github.com/bahafraoua/MindFlow)
 
 
-# **Sujet de Stage**
-
 ## **Plateforme d’Évaluation Psychologique des Employés via Analyse de l’Écriture Manuscrite et du Visage**
 
 ---
