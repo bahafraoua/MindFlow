@@ -1,6 +1,10 @@
 # MindFlow
 [🔗 View Demo](https://github.com/bahafraoua/MindFlow)
 
+## **Counter app et comment l'utiliser**
+
+Installez Streamlit (pip install streamlit) et sauvegardez le code Python en tant que counter.py.
+Ensuite, exécutez (streamlit run counter.py) dans votre terminal pour ouvrir l'application dans votre navigateur.
 
 ## **Plateforme d’Évaluation Psychologique des Employés via Analyse de l’Écriture Manuscrite et du Visage**
 
