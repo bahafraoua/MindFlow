@@ -1,0 +1,31 @@
+import streamlit as st
+
+def initialize_counter():
+    if 'count' not in st.session_state:
+        st.session_state.count = 0
+
+# Call the initialization function at the start of the script
+initialize_counter()
+
+# Set up the page layout and title
+st.set_page_config(layout="centered", page_title="Counter App")
+
+
+decrement, counter, increment = st.columns([0.05, 0.9, 0.05])
+
+with decrement:
+    if st.button("➖", key="decrement_button"):
+        st.session_state.count -= 1
+
+with counter:
+    # Display the current counter value
+    st.markdown(
+        f"<div style='font-size: 4em; font-weight: bold; text-align: center; color: #f7f0f0;'>"
+        f"{st.session_state.count}</div>",
+        unsafe_allow_html=True
+    )
+
+with increment:
+    if st.button("➕", key="increment_button"):
+        st.session_state.count += 1
+
