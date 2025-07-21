@@ -2,7 +2,8 @@ import streamlit as st
 
 # Page title
 st.title("⚙️ Settings")
-
+st.logo(image="images\MindFlowHorizental.png",
+        icon_image="images\MindFlow.png")
 st.markdown("Configure your preferences and analysis options below.")
 
 # Language selection
