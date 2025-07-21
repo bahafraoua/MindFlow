@@ -7,6 +7,9 @@ st.set_page_config(page_title="MindFlow | Gemini AI Assistant", layout="centered
 
 st.title("🧠 MindFlow – Chat with Gemini AI")
 st.write("Ask Gemini a question related to mental well-being, workplace stress, or psychological insights.")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
 
 # --- Retrieve API Key Securely ---
 try:

@@ -2,8 +2,10 @@ import streamlit as st
 
 # Page title
 st.title("🔒 Confidentiality & Data Privacy")
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 st.markdown("""
 At MindFlow, protecting the privacy and rights of our users is a top priority.
 

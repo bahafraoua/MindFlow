@@ -2,8 +2,10 @@ import streamlit as st
 
 # Page title
 st.title("📚 Help & User Guide")
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 st.markdown("""
 Welcome to the MindFlow Help Center. Here you will find tutorials, step-by-step instructions, and answers to common questions.
 

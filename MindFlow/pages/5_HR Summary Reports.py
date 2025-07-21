@@ -3,8 +3,10 @@ import pandas as pd
 
 # Page title
 st.title("📁 HR Summary Reports")
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 st.markdown("""
 Access automatically generated, anonymized psychological well-being reports to support your HR decisions.
 """)

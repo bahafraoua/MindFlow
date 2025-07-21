@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 # Page title
 st.title("📊 Results History")
 st.markdown("### View all past emotion and handwriting analyses")
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 
 # Sample data (replace with real stored data)
 analysis_history = pd.DataFrame({

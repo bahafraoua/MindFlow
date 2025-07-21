@@ -11,8 +11,9 @@ with col_center:
 # Page title
 st.title("👋 Welcome to MindFlow")
 st.markdown("### Your AI-powered mental well-being companion")
-
-st.logo(image="images\MindFlowHorizental.png",
+# utils.py
+def show_sidebar_logo():
+    st.logo(image="images\MindFlowHorizental.png",
         icon_image="images\MindFlow.png")
 
 # Introductory message

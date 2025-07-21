@@ -4,8 +4,10 @@ from PIL import Image
 # Page title
 st.title("✍️ Handwriting Analysis")
 st.markdown("### Upload a handwritten sample to extract psychological traits using graphology")
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 # Step 1: Upload handwriting image
 st.subheader("Step 1: Upload Handwriting Sample")
 

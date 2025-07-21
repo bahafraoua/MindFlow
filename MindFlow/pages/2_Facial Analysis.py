@@ -6,8 +6,10 @@ from PIL import Image
 # Page title
 st.title("📷 Facial Analysis")
 st.markdown("### Detect emotions in real time from a captured image or webcam")
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 # Step 1: Choose image source
 st.subheader("Step 1: Upload or Capture Image")
 

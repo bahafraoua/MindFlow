@@ -12,8 +12,10 @@ recent_data = pd.DataFrame({
 
 # Sidebar
 
-st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
+
+
 
 # Header
 st.title("Psychological Overview Dashboard")
