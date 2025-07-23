@@ -1,5 +1,5 @@
 import streamlit as st
-from modules.nav import Nav
+#from modules.nav import Nav
 
 
 st.set_page_config(
@@ -14,7 +14,7 @@ def get_response(msg):
 
 
 def main():
-    Nav()
+    #Nav()
     st.header('💬 Chat')
 
     if prompt := st.chat_input('enter message'):

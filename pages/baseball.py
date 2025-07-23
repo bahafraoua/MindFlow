@@ -1,5 +1,5 @@
 import streamlit as st
-from modules.nav import Nav
+#from modules.nav import Nav
 
 
 st.set_page_config(
@@ -10,7 +10,7 @@ st.set_page_config(
 
 
 def main():
-    Nav()
+   # Nav()
     st.header('⚾ Baseball')
 
     # Other stuff
