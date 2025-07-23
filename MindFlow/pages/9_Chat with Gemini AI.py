@@ -4,7 +4,7 @@ import json
 from MindFlow import show_sidebar_logo
 show_sidebar_logo()
 
-st.title("🧠 MindFlow – Chat with Gemini AI")
+st.title(" MindFlow – Chat with Gemini AI")
 st.write("Ask Gemini a question related to mental well-being, workplace stress, or psychological insights.")
 from MindFlow import show_sidebar_logo
 show_sidebar_logo()
