@@ -1,9 +1,8 @@
 import streamlit as st
 import requests
 import json
-
-# Set page config
-st.set_page_config(page_title="MindFlow | Gemini AI Assistant", layout="centered")
+from MindFlow import show_sidebar_logo
+show_sidebar_logo()
 
 st.title("🧠 MindFlow – Chat with Gemini AI")
 st.write("Ask Gemini a question related to mental well-being, workplace stress, or psychological insights.")
@@ -70,5 +69,3 @@ if st.button("Get a Response"):
     else:
         st.warning("Please enter a question for Gemini.")
 
-st.markdown("---")
-st.caption("Powered by Google Gemini AI • Integrated into MindFlow")
