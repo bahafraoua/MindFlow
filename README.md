@@ -1,5 +1,5 @@
 # MindFlow
-[🔗 View Demo](https://github.com/bahafraoua/MindFlow)
+[Demo](https://github.com/bahafraoua/MindFlow)
 
 
 ## Comment Utiliser l'Application
