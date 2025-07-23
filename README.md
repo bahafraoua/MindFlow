@@ -11,7 +11,7 @@ Bienvenue sur la plateforme MindFlow ! Cette section vous guidera sur la manièr
     * Installez Streamlit en exécutant la commande suivante dans votre terminal :
 
         ```
-        pip install streamlit
+        pip install -r requirements.txt
         ```
 
 2.  **Exécuter l'Application :**
@@ -19,7 +19,7 @@ Bienvenue sur la plateforme MindFlow ! Cette section vous guidera sur la manièr
     * Depuis votre terminal, dans le répertoire du projet où se trouve `MindFlow`, exécutez la commande suivante :
 
         ```
-        streamlit run MindFlow\MindFlow.py
+        streamlit run streamlit_app.py 
         ```
 
     * Cette commande démarrera le serveur Streamlit et ouvrira automatiquement la platform
