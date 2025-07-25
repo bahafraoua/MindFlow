@@ -31,6 +31,5 @@ MindFlow_path = os.path.join("images", "MindFlow.png")
 #     Chat()
 
 def show_sidebar_logo():
-    print(MindFlowHorizental_path)
     st.logo(image=MindFlowHorizental_path,
         icon_image=MindFlow_path) 
