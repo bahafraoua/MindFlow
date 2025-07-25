@@ -1,19 +1,20 @@
 import streamlit as st
-#from modules.nav import Nav
+from modules.nav import show_sidebar_logo
 
+
+show_sidebar_logo()
 
 st.set_page_config(
     layout='centered',
-    page_title='Baseball',
-    page_icon='🏆'
+    page_title='MindFlow'
 )
 
 
 def main():
    # Nav()
-    st.header('⚾ Baseball')
+    st.header('MindFlow')
 
-    # Other stuff
+  
 
 
 if __name__ == '__main__':
