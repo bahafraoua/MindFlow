@@ -19,7 +19,7 @@ Bienvenue sur la plateforme MindFlow ! Cette section vous guidera sur la manièr
     * Depuis votre terminal, dans le répertoire du projet où se trouve `MindFlow`, exécutez la commande suivante :
 
         ```
-        streamlit run streamlit_app.py 
+        streamlit run MindFlow.py 
         ```
 
     * Cette commande démarrera le serveur Streamlit et ouvrira automatiquement la platform
