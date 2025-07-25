@@ -1,7 +1,6 @@
 import streamlit as st
 from modules.nav import show_sidebar_logo
 
-
 show_sidebar_logo()
 
 st.set_page_config(
@@ -9,13 +8,10 @@ st.set_page_config(
     page_title='MindFlow'
 )
 
-
 def main():
-   # Nav()
+    # Nav()
     st.header('MindFlow')
-
-  
-
+    st.write("MindFlow is an AI-powered platform that analyzes handwriting and facial expressions to detect emotions and assess psychological well-being in the workplace.")
 
 if __name__ == '__main__':
     main()
