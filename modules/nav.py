@@ -1,5 +1,7 @@
 import streamlit as st
-
+import os
+MindFlowHorizental_path = os.path.join("images", "MindFlowHorizental.png")
+MindFlow_path = os.path.join("images", "MindFlow.png")
 
 # def Home():
 #     st.sidebar.page_link('streamlit_app.py', label='Home', icon='🏡')
@@ -29,5 +31,5 @@ import streamlit as st
 #     Chat()
 
 def show_sidebar_logo():
-    st.logo(image="images\MindFlowHorizental.png",
-        icon_image="images\MindFlow.png") 
+    st.logo(image=MindFlowHorizental_path,
+        icon_image=MindFlow_path) 

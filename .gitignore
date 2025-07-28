@@ -1,6 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-modules/__pycache__/
+modules/__pycache__/*
 *.py[cod]
 *$py.class
 
@@ -189,3 +189,4 @@ fabric.properties
 venv
 venv/
 
+modules/__pycache__/nav.cpython-312.pyc
