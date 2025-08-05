@@ -16,8 +16,9 @@ from io import BytesIO
 #
 # 4. Paste your API key into the text input field in the web app.
 # ---
-api_key = "AIzaSyBVZQKiYt42GYvhdzMI7RKawIYSw2i2ga4"
-def analyze_handwriting_with_gemini(api_key, image_param):
+
+api_key = 'AIzaSyBVZQKiYt42GYvhdzMI7RKawIYSw2i2ga4'
+def analyze_handwriting_with_gemini(image_param):
     """
     Analyzes a handwriting image using the Gemini 1.5 Flash model.
 
@@ -71,12 +72,12 @@ if uploaded_file is not None:
 
     # Analyze button
     if st.button("Analyser l'écriture manuscrite"):
-        if not api_key:
+        if not os.getenv('GEMINI_API_KEY'):
             st.error("Veuillez entrer votre clé API Gemini pour continuer.")
         else:
             with st.spinner("🤖 Analyse en cours avec Gemini..."):
                 # Call the analysis function
-                analysis_result = analyze_handwriting_with_gemini(api_key, image)
+                analysis_result = analyze_handwriting_with_gemini(image)
 
                 # Display the results
                 st.subheader("Résultats de l'analyse:")
