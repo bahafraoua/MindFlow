@@ -33,10 +33,11 @@ def analyze_handwriting_with_gemini(api_key, image_param):
         model = genai.GenerativeModel('gemini-1.5-flash')
 
         prompt_text = (
-            "Veuillez analyser cette écriture manuscrite ou cette signature. "
-            "Fournissez une évaluation sur la lisibilité, le style, la personnalité possible, "
-            "et toute caractéristique remarquable. Votre réponse doit être en français."
-        )
+    "Analysez cette écriture manuscrite ou signature d’un point de vue psychologique. "
+    "Déduisez les traits de personnalité, l’état émotionnel, l’état psychologique, la stabilité mentale "
+    "et tout signe de stress. Soyez précis. Répondez en français."
+)
+
 
         # ✅ Directly use the PIL image
         content = [prompt_text, image_param]
