@@ -93,7 +93,6 @@ def analyze_handwriting_with_gemini(api_key, image_param):
 
 
 
-        # ✅ Directly use the PIL image
         content = [prompt_text, image_param]
 
         response = model.generate_content(content)
