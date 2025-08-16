@@ -1,9 +1,9 @@
 import streamlit as st
 import google.generativeai as genai
+import json
+from middleware.text_to_json import format_text_to_schema
 from PIL import Image
-import io
-import base64
-import os
+import re
 from dotenv import load_dotenv
 from modules.nav import show_sidebar_logo
 
@@ -11,9 +11,11 @@ load_dotenv()
 
 show_sidebar_logo()
 
+
+
 def configure_gemini():
     """Configure Gemini AI with API key"""
-    api_key = 'AIzaSyBVZQKiYt42GYvhdzMI7RKawIYSw2i2ga4'
+    api_key = 'AIzaSyCDXodSPO3LNaIe9fIxGT3M--saYCSGpQs'
     if not api_key:
         st.error("⚠️ Gemini API key not found. Please set GEMINI_API_KEY in your environment variables.")
         st.info("You can get your API key from: https://makersuite.google.com/app/apikey")
@@ -23,75 +25,86 @@ def configure_gemini():
     return genai.GenerativeModel('gemini-1.5-flash')
 
 def analyze_facial_expression(image, model):
-    """Analyze facial expression using Gemini 1.5 Flash"""
+    """Analyze facial expression using Gemini 1.5 Flash and return both text and JSON formats"""
     try:
         prompt = """Role: You are a world-class expert in facial expression analysis, behavioral psychology, and occupational psychosocial assessment, with a specialization in HR risk detection.  
-        You are skilled at observing micro-expressions, muscle tension, eye dynamics, and other facial indicators to detect a wide range of emotional states, including stress, tiredness, depression, fatigue, happiness, and other nuanced emotions.  
-        You must carefully describe the observable facial characteristics and explain what these may indicate about the subject's emotional and psychosocial state, supported by a scoring system for each detected emotion.
+            You are skilled at observing micro-expressions, muscle tension, eye dynamics, and other facial indicators to detect a wide range of emotional states, including stress, tiredness, depression, fatigue, happiness, and other nuanced emotions.  
+            You must carefully describe the observable facial characteristics and explain what these may indicate about the subject's emotional and psychosocial state, supported by a scoring system for each detected emotion.
 
-        Mission: You will analyze the provided facial image or video frame and produce a highly professional, deeply detailed interpretation.
+            Mission: You will analyze the provided facial image or video frame and produce a highly professional, deeply detailed interpretation.
 
-        Language and Formatting:
+            Language and Formatting:
 
-        - The final report must be written exclusively in formal, professional French, even though this prompt is in English.
-        - The report structure must follow exactly the format specified below, ensuring each section builds logically toward the final summary.
-        - Your response should consist **only** of the final analysis report. Do not include any introductions, greetings, or task confirmations.
+            - The final report must be written exclusively in formal, professional French, even though this prompt is in English.
+            - The report structure must follow exactly the format specified below, ensuring each section builds logically toward the final summary.
+            - Your response should consist **only** of the final analysis report. Do not include any introductions, greetings, or task confirmations.
 
-        Report Formatting Rules:
+            Report Formatting Rules:
 
-        - Use the exact French section titles.
-        - Each section must describe observable facial features and link them to a psychological and psychosocial interpretation.
-        - Use precise, non-generic observations (avoid vague descriptions like "seems happy").
-        - For each emotion, provide a **score from 0 to 100** indicating the detected intensity.
-        - Include explicit psychosocial risk levels where relevant (low / moderate / high).
-        - Include a dedicated **Contradictions et Incohérences** section to highlight mismatches between facial expressions and contextual cues (e.g., smiling but with tension around the eyes).
-        - The **En résumé** section must be a coherent paragraph, not a bulleted list.
+            - Use the exact French section titles.
+            - Each section must describe observable facial features and link them to a psychological and psychosocial interpretation.
+            - Use precise, non-generic observations (avoid vague descriptions like "seems happy").
+            - For each emotion, provide a **score from 0 to 100** indicating the detected intensity.
+            - Include explicit psychosocial risk levels where relevant (low / moderate / high).
+            - Include a dedicated **Contradictions et Incohérences** section to highlight mismatches between facial expressions and contextual cues (e.g., smiling but with tension around the eyes).
+            - The **En résumé** section must be a coherent paragraph, not a bulleted list.
 
-        ---
+            ---
 
-        **Analyse de l'expression faciale**
+            **Analyse de l'expression faciale**
 
-        **Tension musculaire (Tension musculaire)** : Analyse the contraction or relaxation of facial muscles (forehead, jaw, cheeks) and interpret what this reveals about stress, determination, or relaxation.
+            **Tension musculaire (Tension musculaire)** : Analyse the contraction or relaxation of facial muscles (forehead, jaw, cheeks) and interpret what this reveals about stress, determination, or relaxation.
 
-        **Dynamique des yeux (Dynamique des yeux)** : Observe eye openness, blinking rate, micro-movements, and gaze direction. Interpret these in relation to alertness, fatigue, sadness, or engagement.
+            **Dynamique des yeux (Dynamique des yeux)** : Observe eye openness, blinking rate, micro-movements, and gaze direction. Interpret these in relation to alertness, fatigue, sadness, or engagement.
 
-        **Position et mouvement des sourcils (Sourcils)** : Analyze eyebrow position (raised, furrowed, neutral) and movement patterns. Link to emotions such as surprise, concentration, or concern.
+            **Position et mouvement des sourcils (Sourcils)** : Analyze eyebrow position (raised, furrowed, neutral) and movement patterns. Link to emotions such as surprise, concentration, or concern.
 
-        **Configuration de la bouche (Bouche)** : Examine lip position, curvature, and tension. Interpret signs of happiness, frustration, sadness, or suppression of emotion.
+            **Configuration de la bouche (Bouche)** : Examine lip position, curvature, and tension. Interpret signs of happiness, frustration, sadness, or suppression of emotion.
 
-        **Symétrie faciale (Symétrie)** : Observe symmetry in expressions and movements, noting any asymmetry that may indicate emotional suppression or internal conflict.
+            **Symétrie faciale (Symétrie)** : Observe symmetry in expressions and movements, noting any asymmetry that may indicate emotional suppression or internal conflict.
 
-        **Signes de fatigue (Fatigue)** : Detect dark circles, drooping eyelids, or reduced muscle tone, and explain their link to tiredness or exhaustion.
+            **Signes de fatigue (Fatigue)** : Detect dark circles, drooping eyelids, or reduced muscle tone, and explain their link to tiredness or exhaustion.
 
-        **Scoring émotionnel (Scoring émotionnel)** : Provide a score from 0 to 100 for each of the following emotions:  
-        - Stress:  /100
-        - Fatigue:  /100
-        - Dépression:  /100
-        - Joie / Bonheur:  /100
-        - Colère:  /100
-        - Surprise:  /100
-        - Calme / Sérénité:  /100
+            **Scoring émotionnel (Scoring émotionnel)** : Provide a score from 0 to 100 for each of the following emotions:  
+            - Stress:  /100
+            - Fatigue:  /100
+            - Dépression:  /100
+            - Joie / Bonheur:  /100
+            - Colère:  /100
+            - Surprise:  /100
+            - Calme / Sérénité:  /100
+            - Tristesse:  /100
+            - Anxiété:  /100
+            - Frustration:  /100
+            - Enthousiasme:  /100
 
-        **Contradictions et Incohérences (Contradictions et Incohérences)** : Highlight elements of the facial expression that conflict with other visual cues or the context, and analyze what these tensions may reveal about internal states.
+            **Contradictions et Incohérences (Contradictions et Incohérences)** : Highlight elements of the facial expression that conflict with other visual cues or the context, and analyze what these tensions may reveal about internal states.
 
-        **En résumé (En résumé)** : Provide a coherent summary paragraph integrating all observations into a personality and emotional state profile, explicitly referencing emotional balance, coping capacity, and psychosocial well-being.  
-        Include explicit psychosocial indicators:  
-        - Niveau de stress: faible / modéré / élevé  
-        - Risque de burnout: faible / modéré / élevé  
-        - État de motivation: faible / modéré / élevé  
-        - Adaptabilité émotionnelle: faible / modéré / élevé  
-        - Capacité de régulation émotionnelle: faible / modéré / élevé
+            **En résumé (En résumé)** : Provide a coherent summary paragraph integrating all observations into a personality and emotional state profile, explicitly referencing emotional balance, coping capacity, and psychosocial well-being.  
+            Include explicit psychosocial indicators:  
+            - Niveau de stress: faible / modéré / élevé  
+            - Risque de burnout: faible / modéré / élevé  
+            - État de motivation: faible / modéré / élevé  
+            - Adaptabilité émotionnelle: faible / modéré / élevé  
+            - Capacité de régulation émotionnelle: faible / modéré / élevé
+            ---
 
-        ---
-
-        Input: A facial image or video frame.  
-        Output: Only the completed French report in the structure above.
-        """
+            Input: A facial image or video frame.  
+            Output: Only the completed French report in the structure above 
+            """
         
-        response = model.generate_content([prompt, image])
-        return response.text
+        # Get normal text response
+        response = model.generate_content(contents=[prompt, image])
+        text_response = response.text
+        
+        # Format JSON in a separate variable
+        json_response = format_text_to_schema(text_response, analysis_type="Facial Expression Analysis")
+        print(json_response)
+        return text_response
+            
     except Exception as e:
         return f"Error analyzing image: {str(e)}"
+
 
 def main():
     st.header('🧠 Facial Analysis')
@@ -126,8 +139,8 @@ def main():
             image = Image.open(camera_image)
 
             with st.spinner("🤖 Analyzing facial expression with Gemini AI..."):
-                analysis = analyze_facial_expression(image, model)
-                st.markdown(analysis)
+                analysis_result = analyze_facial_expression(image, model)
+                st.markdown(analysis_result)
     
     with tab2:
         st.subheader("Upload an Image")
@@ -146,10 +159,8 @@ def main():
                 st.image(image, caption="Uploaded Image", width=400)
             
             with st.spinner("🤖 Analyzing facial expression with Gemini AI..."):
-                analysis = analyze_facial_expression(image, model)
-                
-                st.subheader("📊 Analysis Results")
-                st.markdown(analysis)
+                analysis_result = analyze_facial_expression(image, model)
+                st.markdown(analysis_result)
     
     
     st.info("🔒 **Privacy Note**: Images are processed securely and not stored permanently. Analysis is for well-being assessment purposes only.")
