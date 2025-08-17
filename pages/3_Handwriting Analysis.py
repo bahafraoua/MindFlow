@@ -1,24 +1,12 @@
 import streamlit as st
-import google.generativeai as genai
-from middleware.text_to_json import format_text_to_schema
 from PIL import Image
-from dotenv import load_dotenv
+from config.gemini_config import configure_gemini
+from middleware.text_to_json import format_text_to_schema
 from modules.nav import show_sidebar_logo
+from imagehash import average_hash
 
-load_dotenv()
 
 show_sidebar_logo()
-
-def configure_gemini():
-    """Configure Gemini AI with API key"""
-    api_key = 'AIzaSyCDXodSPO3LNaIe9fIxGT3M--saYCSGpQs'
-    if not api_key:
-        st.error("⚠️ Gemini API key not found. Please set GEMINI_API_KEY in your environment variables.")
-        st.info("You can get your API key from: https://makersuite.google.com/app/apikey")
-        return None
-    
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel('gemini-1.5-flash')
 
 def analyze_handwriting(image, model):
     """Analyze handwriting using Gemini 1.5 Flash and return text response"""
@@ -109,6 +97,8 @@ def main():
         
     if uploaded_file is not None:
             image = Image.open(uploaded_file)
+            imageHash = average_hash(image)
+            print(f"Image Hash: {imageHash}")
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 st.image(image, caption="Uploaded Image", width=400)
