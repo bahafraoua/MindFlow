@@ -30,14 +30,14 @@ def format_text_to_schema(text_response: str, analysis_type:str) -> str:
             "type": "object",
             "analysis_type": analysis_type,
             "analysis": "",
-            "Statut Psychosocial": {
-                "Niveau de stress": "modéré",
-                "Risque de burnout": "modéré",
-                "Motivation & engagement": "modéré",
-                "Adaptabilité": "modéré",
-                "Tendance à l'intégration sociale": "modéré"
+            "psychosocial_status": {
+                "stress_level": "modéré",
+                "burnout_risk": "modéré",
+                "motivation_engagement": "modéré",
+                "adaptability": "modéré",
+                "social_integration_tendency": "modéré"
             },
-            "En résumé": ""
+            "summary": ""
         }
 
         lines = text_response.splitlines()
@@ -49,11 +49,11 @@ def format_text_to_schema(text_response: str, analysis_type:str) -> str:
             result["analysis"] = text_response.strip()
 
         mapping = {
-            "Niveau de stress": ["Niveau de stress"],
-            "Risque de burnout": ["Risque de burnout"],
-            "Motivation & engagement": ["État de motivation", "Motivation"],
-            "Adaptabilité": ["Adaptabilité"],
-            "Tendance à l'intégration sociale": [
+            "stress_level": ["Niveau de stress"],
+            "burnout_risk": ["Risque de burnout"],
+            "motivation_engagement": ["État de motivation", "Motivation"],
+            "adaptability": ["Adaptabilité"],
+            "social_integration_tendency": [
                 "Capacité de régulation émotionnelle",
                 "Tendance à l'intégration sociale"
             ]
@@ -62,11 +62,11 @@ def format_text_to_schema(text_response: str, analysis_type:str) -> str:
         for key, labels in mapping.items():
             value = extract_value(text_response, labels)
             if value and value.lower() in ["faible", "modéré", "élevé"]:
-                result["Statut Psychosocial"][key] = value.lower()
+                result["psychosocial_status"][key] = value.lower()
 
         # Résumé
-        result["En résumé"] = extract_resume(text_response) or \
-                              "Résumé non disponible dans le format attendu."
+        result["summary"] = extract_resume(text_response) or \
+                           "Résumé non disponible dans le format attendu."
 
         return json.dumps(result, indent=4, ensure_ascii=False)
 
@@ -74,12 +74,12 @@ def format_text_to_schema(text_response: str, analysis_type:str) -> str:
         return json.dumps({
             "type": "object",
             "analysis": text_response,
-            "Statut Psychosocial": {
-                "Niveau de stress": "modéré",
-                "Risque de burnout": "modéré",
-                "Motivation & engagement": "modéré",
-                "Adaptabilité": "modéré",
-                "Tendance à l'intégration sociale": "modéré"
+            "psychosocial_status": {
+                "stress_level": "modéré",
+                "burnout_risk": "modéré",
+                "motivation_engagement": "modéré",
+                "adaptability": "modéré",
+                "social_integration_tendency": "modéré"
             },
-            "En résumé": "Erreur lors du formatage de la réponse."
+            "summary": "Erreur lors du formatage de la réponse."
         }, indent=4, ensure_ascii=False)
