@@ -1,9 +1,11 @@
 import streamlit as st
 from config.gemini_config import configure_gemini
+from config.database_config import get_firebase_manager
 from middleware.text_to_json import format_text_to_schema
+from middleware.image_processing import compress_image_to_base64
 from PIL import Image
 from modules.nav import show_sidebar_logo
-from imagehash import average_hash
+import uuid
 
 show_sidebar_logo()
 
@@ -82,11 +84,19 @@ def analyze_facial_expression(image, model):
         
         # Format JSON in a separate variable
         json_response = format_text_to_schema(text_response, analysis_type="Facial Expression Analysis")
-        print(json_response)
+        image_base64, compression_info = compress_image_to_base64(image)
+        get_firebase_manager().save_analysis(
+            str(uuid.uuid4()),
+            image=image_base64,
+            analysis_data=json_response,
+            compression_info=compression_info,
+            analysis_type='facial_analysis'
+        )
+
         return text_response
             
     except Exception as e:
-        return f"Error analyzing image: {str(e)}"
+        return f"Error analyzing image: {str(e)}", None
 
 
 def main():
@@ -94,11 +104,20 @@ def main():
     st.markdown("**AI-powered facial expression and emotion analysis for workplace well-being assessment**")
     st.divider()
     
+    # Initialize session state for user ID
+    if 'user_id' not in st.session_state:
+        st.session_state.user_id = str(uuid.uuid4())
+    
+    # Initialize Firebase timestamp
+    if 'current_timestamp' not in st.session_state:
+        from datetime import datetime
+        st.session_state.current_timestamp = datetime.now()
+    
     model = configure_gemini()
     if not model:
         return
 
-    tab1, tab2 = st.tabs(["📸 Camera Capture", "📁 Upload Image"])
+    tab1, tab2= st.tabs(["📸 Camera Capture", "📁 Upload Image"])
     
     with tab1:
         st.subheader("Take a Photo")
@@ -108,7 +127,7 @@ def main():
             **Why we need camera access:**
             - To capture your photo for facial analysis
             - Images are processed locally and securely
-            - No data is stored permanently
+            - Analysis results are stored securely in our database
             
             **If camera doesn't work:**
             - Check if your browser allows camera access for this site
@@ -120,10 +139,8 @@ def main():
         
         if camera_image is not None:
             image = Image.open(camera_image)
-            imageHash = average_hash(image)
-            print(f"Image Hash: {imageHash}")
             with st.spinner("🤖 Analyzing facial expression with Gemini AI..."):
-                analysis_result = analyze_facial_expression(image, model)
+                analysis_result= analyze_facial_expression(image, model)
                 st.markdown(analysis_result)
     
     with tab2:
@@ -138,8 +155,6 @@ def main():
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            imageHash = average_hash(image)
-            print(f"Image Hash: {imageHash}")
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 st.image(image, caption="Uploaded Image", width=400)
@@ -148,8 +163,5 @@ def main():
                 analysis_result = analyze_facial_expression(image, model)
                 st.markdown(analysis_result)
     
-    
-    st.info("🔒 **Privacy Note**: Images are processed securely and not stored permanently. Analysis is for well-being assessment purposes only.")
-
 if __name__ == '__main__':
     main()

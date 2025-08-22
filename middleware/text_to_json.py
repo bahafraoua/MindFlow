@@ -63,8 +63,6 @@ def format_text_to_schema(text_response: str, analysis_type:str) -> str:
             value = extract_value(text_response, labels)
             if value and value.lower() in ["faible", "modéré", "élevé"]:
                 result["psychosocial_status"][key] = value.lower()
-
-        # Résumé
         result["summary"] = extract_resume(text_response) or \
                            "Résumé non disponible dans le format attendu."
 

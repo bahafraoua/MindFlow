@@ -1,9 +1,11 @@
 import streamlit as st
 from PIL import Image
 from config.gemini_config import configure_gemini
+from config.database_config import get_firebase_manager
 from middleware.text_to_json import format_text_to_schema
+from middleware.image_processing import compress_image_to_base64
 from modules.nav import show_sidebar_logo
-from imagehash import average_hash
+import uuid
 
 
 show_sidebar_logo()
@@ -70,46 +72,51 @@ def analyze_handwriting(image, model):
         text_response = response.text
         
         # Format JSON in a separate variable
-        json_response = format_text_to_schema(text_response, analysis_type="Handwriting Analysis")
-        print(json_response)
+        json_response = format_text_to_schema(text_response, analysis_type="Facial Expression Analysis")
+        image_base64, compression_info = compress_image_to_base64(image)
+        get_firebase_manager().save_analysis(
+            str(uuid.uuid4()),
+            image=image_base64,
+            analysis_data=json_response,
+            compression_info=compression_info,
+            analysis_type='handwriting_analysis'
+        )
+
         return text_response
-            
     except Exception as e:
-        return f"Error analyzing image: {str(e)}"
-    
+        return f"Error analyzing image: {str(e)}", None
+
+
+
 def main():
     st.header('✍️ Handwriting Analysis')
     st.markdown("**AI-powered handwriting analysis for workplace well-being assessment**")
     st.divider()
-    
     model = configure_gemini()
     if not model:
         return
     
     st.subheader("Upload a Handwriting Image")
     st.markdown("Upload an image of handwriting or signature for analysis")
-        
+            
     uploaded_file = st.file_uploader(
             "Choose an image file", 
-            type=['png', 'jpg', 'jpeg', 'gif', 'bmp'],
-            help="Supported formats: PNG, JPG, JPEG, GIF, BMP"
-        )
-        
+                type=['png', 'jpg', 'jpeg', 'gif', 'bmp'],
+                help="Supported formats: PNG, JPG, JPEG, GIF, BMP"
+            )
+            
     if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            imageHash = average_hash(image)
-            print(f"Image Hash: {imageHash}")
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 st.image(image, caption="Uploaded Image", width=400)
-            
+                
             if st.button("🔍 Analyser l'écriture", type="primary"):
                 with st.spinner("🤖 Analyzing handwriting with Gemini AI..."):
                     analysis_result = analyze_handwriting(image, model)
                     st.markdown(analysis_result)
-    
 
-    st.info("🔒 **Privacy Note**: Images are processed securely and not stored permanently. Analysis is for well-being assessment purposes only.")
+    st.info(" **Privacy Note**: Images are processed securely and analysis results are stored in our secure database. Analysis is for well-being assessment purposes only.")
 
 if __name__ == '__main__':
     main()
