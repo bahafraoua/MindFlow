@@ -190,4 +190,5 @@ venv
 venv/
 
 modules/__pycache__/nav.cpython-312.pyc
-services
+/services/*.json
+
