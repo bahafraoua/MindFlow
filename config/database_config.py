@@ -50,7 +50,6 @@ class FirebaseManager:
             }
 
             doc_ref = self.db.collection(analysis_type).add(doc_data)
-            print(f"{analysis_type} saved with ID: {doc_ref[1].id}")
             return doc_ref[1].id
             
         except Exception as e:
