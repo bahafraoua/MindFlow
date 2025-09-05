@@ -67,15 +67,18 @@ def analyze_handwriting(image, model):
             Output: Only the completed French report in the structure above
             """
         
-        # Get normal text response
         response = model.generate_content(contents=[prompt, image])
         text_response = response.text
         
-        # Format JSON in a separate variable
-        json_response = format_text_to_schema(text_response, analysis_type="Facial Expression Analysis")
+        json_response = format_text_to_schema(text_response, analysis_type="Handwriting Analysis")
         image_base64, compression_info = compress_image_to_base64(image)
+        
+        user_id = st.session_state.get('user_id', 'anonymous_user')
+        analysis_id = str(uuid.uuid4())
+        
         get_firebase_manager().save_analysis(
-            str(uuid.uuid4()),
+            user_id=user_id,
+            analysis_id=analysis_id,
             image=image_base64,
             analysis_data=json_response,
             compression_info=compression_info,

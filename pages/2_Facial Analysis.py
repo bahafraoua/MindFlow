@@ -85,8 +85,14 @@ def analyze_facial_expression(image, model):
         # Format JSON in a separate variable
         json_response = format_text_to_schema(text_response, analysis_type="Facial Expression Analysis")
         image_base64, compression_info = compress_image_to_base64(image)
+        
+        # Generate unique user ID (in a real app, this would come from authentication)
+        user_id = st.session_state.get('user_id', 'anonymous_user')
+        analysis_id = str(uuid.uuid4())
+        
         get_firebase_manager().save_analysis(
-            str(uuid.uuid4()),
+            user_id=user_id,
+            analysis_id=analysis_id,
             image=image_base64,
             analysis_data=json_response,
             compression_info=compression_info,
